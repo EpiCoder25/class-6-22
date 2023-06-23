@@ -1,11 +1,28 @@
 ---
-title: "class-6-22"
+title: "Babynames"
+execute: 
+  echo: false
+  
 ---
 
-This is a Quarto website.
+This is an example of a plot in class today from Babynames.
+```{r}
+#! message: false
+library(tidyverse)
+library(babynames)
+```
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 
 ```{r}
-1 + 1
+babynames
+babynames |> 
+  filter(str_detect(name, "i$")) |> 
+           select(year, sex, n, prop) |>  
+  summarize(sum_prop = sum(prop), .by = c(year, sex))  |> 
+  ggplot(aes(x=year, y = sum_prop, color= sex, fill = sex)) + 
+  geom_area(aes(fill = sex)) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "US Babies Receiving Names Ending in -i", subtitle = "Boy names ending with -i are steadily increasing", x = "year", y = "percent", fill = "sex", caption = "Babynames R package")
 ```
+
+
